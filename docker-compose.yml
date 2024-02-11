@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  customer-service:
+    build: .
+    ports:
+      - "8080:8080"
+    depends_on:
+      - customer_db
+    environment:
+      POSTGRES_HOST: customer_db
+    networks:
+      - spring-postgres
+
+  customer_db:
+    image: postgres:latest
+    restart: always
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: mysecretpassword
+    ports:
+      - "5432:5432"
+    networks:
+      - spring-postgres
+
+networks:
+  spring-postgres:
+    driver: bridge
